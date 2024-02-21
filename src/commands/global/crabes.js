@@ -3,6 +3,7 @@ const { getCrabeEmbed } = require("../crabe_utils");
 const Crabe = require("../../../database/models/model_Crabe");
 const Village = require("../../../database/models/model_Village");
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { EmbedUtils, EMBED_COLOR } = require("../../embeds");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -17,7 +18,16 @@ module.exports = {
       },
     });
     if (!village) {
-      await interaction.reply("Village introuvable.");
+      const embed2 = new EmbedUtils({
+        interaction,
+        title: "Commandes simples",
+        color: EMBED_COLOR.ORANGE,
+        profilThumbnail: false,
+      })
+        .setTitle(`🦀 Tu n'as pas encore créer de village ! 🦀`)
+        .setColor("#FFD700")
+        .setDescription("Tu peux le faire à l'aide de la commande /village");
+      await interaction.reply({ embeds: [embed2.getEmbed()] });
       return;
     }
     const crabes = await Crabe.findAll({ where: { village_id: village.id } });

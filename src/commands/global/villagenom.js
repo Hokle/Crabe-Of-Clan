@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { Village } = global.sequelize.models;
 const { embedError, EmbedUtils, EMBED_COLOR } = require("../../embeds");
-const { MessageEmbed } = require("discord.js");
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("villagenom")
@@ -53,16 +53,16 @@ module.exports = {
         console.log("après embed");
         interaction.reply({ embeds: [embedVillage.getEmbed()] });
       } else {
-        const embed = new EmbedUtils({
+        const embed2 = new EmbedUtils({
           interaction,
-          title: "Crabaggare",
+          title: "Commandes simples",
           color: EMBED_COLOR.ORANGE,
           profilThumbnail: false,
         })
-          .setTitle("🚨  %username%")
-          .setColor("#ff0000")
-          .setDescription(`Impossible de modifier le nom de ton village`);
-        interaction.reply({ embeds: [embed.getEmbed()] });
+          .setTitle(`🦀 Tu n'as pas encore créer de village ! 🦀`)
+          .setColor("#FFD700")
+          .setDescription("Tu peux le faire à l'aide de la commande /village");
+        await interaction.reply({ embeds: [embed2.getEmbed()] });
       }
     } catch (error) {
       console.log(error);

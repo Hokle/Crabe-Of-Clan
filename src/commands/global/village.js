@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const Utilisateur = require("../../../database/models/model_Utilisateurs");
 const Village = require("../../../database/models/model_Village");
+const { EmbedUtils, EMBED_COLOR } = require("../../embeds");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -33,7 +34,16 @@ module.exports = {
             discord_server_id: interaction.guild.id,
           });
 
-          await interaction.reply("Ton village est bien créé");
+          const embed = new EmbedUtils({
+            interaction,
+            title: "Commandes simples",
+            color: EMBED_COLOR.ORANGE,
+            profilThumbnail: false,
+          })
+            .setTitle(`🦀 Ton village est maintenant crée ! 🦀`)
+            .setColor("#FFD700");
+
+          await interaction.reply({ embeds: [embed.getEmbed()] });
         }
       } else {
         await Utilisateur.create({ Discord_id: discordUserId, name: nameUser });
