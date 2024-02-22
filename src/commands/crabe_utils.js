@@ -14,7 +14,7 @@ function getCrabeEmbed(nomCrabe, crabe, interaction) {
         "💖 Vie": crabe.dataValues.pv + "",
         "🗡️ Pinces": crabe.dataValues.niveau_pinces + "",
         "🛡️ Carapaces": crabe.dataValues.niveau_carapace + "",
-        "🏛️ Travaille": "Aucun",
+        "🏛️ Travaille": crabe.dataValues.travail + "",
         "👨‍🦲 Appartient": interaction.user.username,
       },
       [0, 1, 2, 3, 4, 5]

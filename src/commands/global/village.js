@@ -27,7 +27,16 @@ module.exports = {
         });
 
         if (village) {
-          await interaction.reply("Tu as déjà un village dans ce serveur");
+          const embed = new EmbedUtils({
+            interaction,
+            title: "Déjà un village !",
+            color: EMBED_COLOR.ORANGE,
+            profilThumbnail: false,
+          })
+            .setTitle(`🦀 Tu as déjà un villag sur le server ! 🦀`)
+            .setColor("#FFD700");
+
+          await interaction.reply({ embeds: [embed.getEmbed()] });
         } else {
           await Village.create({
             id_discord_user: discordUserId,
@@ -36,7 +45,7 @@ module.exports = {
 
           const embed = new EmbedUtils({
             interaction,
-            title: "Commandes simples",
+            title: "Village crée !",
             color: EMBED_COLOR.ORANGE,
             profilThumbnail: false,
           })
@@ -51,7 +60,15 @@ module.exports = {
           id_discord_user: discordUserId,
           discord_server_id: interaction.guild.id,
         });
-        await interaction.reply("Utilisateur créé dans la base de données");
+        const embed = new EmbedUtils({
+          interaction,
+          title: "Village crée !",
+          color: EMBED_COLOR.ORANGE,
+          profilThumbnail: false,
+        })
+          .setTitle(`🦀 Ton village est maintenant crée ! 🦀`)
+          .setColor("#FFD700");
+        await interaction.reply({ embeds: [embed.getEmbed()] });
       }
     } catch (error) {
       console.error(error);

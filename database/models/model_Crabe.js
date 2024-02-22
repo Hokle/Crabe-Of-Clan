@@ -47,6 +47,16 @@ const Crabe = sequelize.define(
       type: DataTypes.INTEGER,
       references: { model: "Village", key: "id" },
     },
+    travail: {
+      type: DataTypes.ENUM(
+        "Agriculteur",
+        "Constructeur",
+        "Soldat",
+        "Explorateur",
+        "Mineur"
+      ),
+      allowNull: false,
+    },
   },
   {
     timestamps: false,

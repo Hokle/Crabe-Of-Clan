@@ -44,10 +44,13 @@ module.exports = {
             "http://localhost:3000/random-image"
           );
           const nomCrabe = response.data.image.replace(".png", "");
+          const metier = getRandomMetier();
+          console.log(metier);
           const newCrabe = await Crabe.create({
             nom: nomCrabe,
             pv: rdm(100),
             village_id: idVillage.dataValues.id,
+            travail: metier,
           });
 
           console.log(
@@ -105,3 +108,15 @@ module.exports = {
     }
   },
 };
+
+function getRandomMetier() {
+  const listeMetier = [
+    "Agriculteur",
+    "Constructeur",
+    "Soldat",
+    "Explorateur",
+    "Mineur",
+  ];
+  const index = Math.floor(Math.random() * listeMetier.length);
+  return listeMetier[index];
+}
