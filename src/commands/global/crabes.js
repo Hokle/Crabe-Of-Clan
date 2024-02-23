@@ -8,47 +8,72 @@ const { EmbedUtils, EMBED_COLOR } = require("../../embeds");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("crabes")
-    .setDescription("Affiche la liste de crabes appartenant à ton village"),
+    .setDescription("Affiche la liste de crabes appartenant à ton village")
+    .addUserOption((option) =>
+      option
+        .setName("utilisateur")
+        .setDescription("Choix de l'utilisateur")
+        .setRequired(true)
+    ),
   async execute(interaction) {
-    const discordUserId = interaction.user.id;
-    let village = await Village.findOne({
-      where: {
-        id_discord_user: discordUserId,
-        discord_server_id: interaction.guild.id,
-      },
-    });
-    if (!village) {
+    try {
+      const user = interaction.options.getUser("utilisateur");
+
+      const discordUserId = user.id;
+      let village = await Village.findOne({
+        where: {
+          id_discord_user: discordUserId,
+          discord_server_id: interaction.guild.id,
+        },
+      });
+      if (!village) {
+        const embed2 = new EmbedUtils({
+          interaction,
+          title: "Commandes simples",
+          color: EMBED_COLOR.ORANGE,
+          profilThumbnail: false,
+        })
+          .setTitle(`🦀 Aucun village existant ! 🦀`)
+          .setColor("#FFD700")
+          .setDescription("Tu peux le faire à l'aide de la commande /village");
+        await interaction.reply({ embeds: [embed2.getEmbed()] });
+        return;
+      }
+
+      const crabes = await Crabe.findAll({ where: { village_id: village.id } });
+      if (crabes.length === 0) {
+        await interaction.reply("Aucun crabe trouvé pour votre village.");
+        return;
+      }
+
+      const crabesEmbeds = crabes.map((crabe) =>
+        getCrabeEmbed(crabes[0].nom, crabe, interaction)
+      );
+
+      const buttons = getButtons();
+      console.log(crabes[0].nom);
+      await interaction.reply({
+        embeds: [crabesEmbeds[0]],
+        files: [__dirname + `../../../../server/public/${crabes[0].nom}.png`],
+        components: [buttons],
+      });
+
+      listenButtonsEvent(interaction, crabes);
+    } catch (error) {
       const embed2 = new EmbedUtils({
         interaction,
-        title: "Commandes simples",
+        title: "/crabes",
         color: EMBED_COLOR.ORANGE,
         profilThumbnail: false,
       })
-        .setTitle(`🦀 Tu n'as pas encore créer de village ! 🦀`)
+        .setTitle(`🦀 Aucun village existant ! 🦀`)
         .setColor("#FFD700")
-        .setDescription("Tu peux le faire à l'aide de la commande /village");
+        .setDescription(
+          "Nous n'avons pas trouvé le village de l'utilisateur demandé"
+        );
       await interaction.reply({ embeds: [embed2.getEmbed()] });
       return;
     }
-    const crabes = await Crabe.findAll({ where: { village_id: village.id } });
-    if (crabes.length === 0) {
-      await interaction.reply("Aucun crabe trouvé pour votre village.");
-      return;
-    }
-
-    const crabesEmbeds = crabes.map((crabe) =>
-      getCrabeEmbed(crabes[0].nom, crabe, interaction)
-    );
-
-    const buttons = getButtons();
-    console.log(crabes[0].nom);
-    await interaction.reply({
-      embeds: [crabesEmbeds[0]],
-      files: [__dirname + `../../../../server/public/${crabes[0].nom}.png`],
-      components: [buttons],
-    });
-
-    listenButtonsEvent(interaction, crabes);
   },
 };
 
