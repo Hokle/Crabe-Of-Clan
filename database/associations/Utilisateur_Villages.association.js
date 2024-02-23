@@ -1,7 +1,13 @@
 module.exports = (sequelize) => {
-  const Utilisateur = require("../models/model_Utilisateur");
-  const Village = require("../models/model_Village");
+  const { Utilisateur, Village } = sequelize.models;
 
-  Utilisateur.hasMany(Village);
-  Village.belongsTo(Utilisateur);
+  Utilisateur.hasMany(Village, {
+    foreignKey: "id_discord_user",
+    sourceKey: "Discord_id",
+    as: "villages",
+  });
+
+  Village.belongsTo(Utilisateur, {
+    foreignKey: "id_discord_user",
+  });
 };

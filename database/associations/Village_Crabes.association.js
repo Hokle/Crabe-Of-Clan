@@ -1,7 +1,13 @@
 module.exports = (sequelize) => {
-  const Villages = require("../models/model_Village");
-  const Crabes = require("../models/model_Crabe");
+  const { Village, Crabe } = sequelize.models;
 
-  Villages.hasMany(Crabes);
-  Crabes.belongsTo(Villages, { foreignKey: "village_id" });
+  Village.hasMany(Crabe, {
+    foreignKey: "village_id",
+    sourceKey: "id",
+    as: "crabes",
+  });
+
+  Crabe.belongsTo(Village, {
+    foreignKey: "village_id",
+  });
 };

@@ -14,11 +14,10 @@ const sequelize = new Sequelize(
   }
 );
 
-module.exports = sequelize;
 ["models", "associations"].map((paths) => {
   const fullPath = path.join(__dirname, paths);
   fs.readdirSync(fullPath).map((file) => {
-    require(path.join(fullPath, file));
+    require(path.join(fullPath, file))(sequelize);
     console.log("[ADD] : ajout de la table", file);
   });
 });
@@ -32,4 +31,5 @@ sequelize
     console.error(`[Error] : Database not synced > ${error.message}`);
   });
 
+module.exports = sequelize;
 global.sequelize = sequelize;
