@@ -45,7 +45,6 @@ module.exports = {
           );
           const nomCrabe = response.data.image.replace(".png", "");
           const metier = getRandomMetier();
-          console.log(metier);
           const newCrabe = await Crabe.create({
             nom: nomCrabe,
             pv: rdm(100),
@@ -53,13 +52,7 @@ module.exports = {
             travail: metier,
           });
 
-          console.log(
-            await Crabe.findOne({
-              where: { village_id: idVillage.dataValues.id },
-            })
-          );
-
-          const embed = getCrabeEmbed(nomCrabe, newCrabe, interaction);
+          const embed = getCrabeEmbed(newCrabe, interaction.user.username);
           await interaction.reply({
             embeds: [embed],
             files: [__dirname + `../../../../server/public/${nomCrabe}.png`],

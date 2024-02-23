@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const Utilisateur = require("../../../database/models/model_Utilisateurs");
-const Village = require("../../../database/models/model_Village");
 const { EmbedUtils, EMBED_COLOR } = require("../../embeds");
+
+const { Utilisateur, Village } = global.sequelize.models;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -12,9 +12,15 @@ module.exports = {
   async execute(interaction) {
     const discordUserId = interaction.user.id;
     const nameUser = interaction.user.username;
-    Utilisateur.name = nameUser;
 
     try {
+      // user = user
+      // userCreated = true/fals => As t-il créer le user à l'instant ?
+
+      // const [user, userCreated] = await Utilisateur.findOrCreate({
+      //   where: { Discord_id: discordUserId },
+      // });
+
       let user = await Utilisateur.findOne({
         where: { Discord_id: discordUserId },
       });

@@ -1,12 +1,12 @@
 const { EmbedUtils, EMBED_COLOR } = require("../embeds");
 
-function getCrabeEmbed(nomCrabe, crabe, interaction) {
+function getCrabeEmbed(crabe, username) {
   const embed = new EmbedUtils({
     title: "Commandes simples",
     color: EMBED_COLOR.ORANGE,
     profilThumbnail: false,
   })
-    .setTitle(`🦀 ${capitalizeFirstLetter(nomCrabe)} 🦀`)
+    .setTitle(`🦀 ${capitalizeFirstLetter(crabe.dataValues.nom)} 🦀`)
     .setColor("#FFD700")
     .addFields(
       {
@@ -15,12 +15,12 @@ function getCrabeEmbed(nomCrabe, crabe, interaction) {
         "🗡️ Pinces": crabe.dataValues.niveau_pinces + "",
         "🛡️ Carapaces": crabe.dataValues.niveau_carapace + "",
         "🏛️ Travaille": crabe.dataValues.travail + "",
-        "👨‍🦲 Appartient": interaction.user.username,
+        "👨‍🦲 Appartient": username,
       },
       [0, 1, 2, 3, 4, 5]
     )
 
-    .setImage(`attachment://${nomCrabe}.png`);
+    .setImage(`attachment://${crabe.dataValues.nom}.png`);
   return embed.getEmbed();
 }
 function capitalizeFirstLetter(string) {
